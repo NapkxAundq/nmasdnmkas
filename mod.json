@@ -1,0 +1,19 @@
+{
+  "geode": "5.11.2",
+  "gd": {
+    "win": "2.2081"
+  },
+  "id": "napkxa.tick-buffer",
+  "name": "Tick Buffer",
+  "version": "v0.1.0",
+  "developer": "NapkxAundq",
+  "description": "Early-jump buffer with 2, 4, 8, 16 and 24 physics-tick modes.",
+  "settings": {
+    "verbose-log": {
+      "type": "bool",
+      "name": "Detailed logging",
+      "description": "Print input-buffer events to the Geode log.",
+      "default": false
+    }
+  }
+}
