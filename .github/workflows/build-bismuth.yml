@@ -1,0 +1,43 @@
+name: Build Bismuth for GD 2.2081
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Windows / Geometry Dash 2.2081
+    runs-on: windows-latest
+    steps:
+      - name: Checkout build wrapper
+        uses: actions/checkout@v4
+
+      - name: Checkout upstream Bismuth source
+        uses: actions/checkout@v4
+        with:
+          repository: IliasHDZ/Bismuth
+          ref: 0b4b71a84c48a5bff2fc80f210de8d6f93a05c3a
+          path: upstream
+          persist-credentials: false
+
+      - name: Build .geode package
+        id: build
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          path: upstream
+          target: Win64
+          sdk: given
+          build-config: Release
+
+      - name: Upload compiled mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: bismuth-gd-2.2081-windows
+          path: ${{ steps.build.outputs.build-output }}
+          if-no-files-found: error
+          retention-days: 14
