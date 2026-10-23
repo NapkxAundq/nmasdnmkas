@@ -84,8 +84,16 @@ class $modify(TickBufferBaseLayer, GJBaseGameLayer) {
             return;
         }
 
-        // Buffer only an early primary-button press. Everything else is passed on unchanged.
-        if (down && !player->m_isDart && !player->m_isOnGround) {
+        // Do not swallow inputs that should activate a ring/orb, dash, or flying-mode control.
+        const bool flyingMode = player->m_isShip || player->m_isBird ||
+                                player->m_isDart || player->m_isSwing;
+        const bool touchingRing = player->m_touchedRing || player->m_touchedCustomRing ||
+                                  (player->m_touchingRings && player->m_touchingRings->count() > 0);
+        const bool specialInput = flyingMode || player->m_isDashing || touchingRing ||
+                                  player->m_touchedGravityPortal;
+
+        // Buffer only an early jump press in a mode where landing can accept it.
+        if (down && !specialInput && !player->m_isOnGround) {
             const int window = tickbuffer::currentWindow();
             if (pending != fields->pendingJumps.end()) {
                 pending->remaining = window;
